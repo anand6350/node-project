@@ -1,4 +1,5 @@
-const Blog = require('../model/blog');
+const Blog = require('../models/blog');
+
 // blogPost, blogDetails, blogDelete
 
 const blogPost = (req, res) => {

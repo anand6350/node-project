@@ -2,7 +2,7 @@ const dns = require('dns');
 dns.setServers(['8.8.8.8', '1.1.1.1']);
 const express = require('express');
 const mongoose = require('mongoose');
-const Blog = require('./model/blog');
+const Blog = require('./models/blog');
 const blogRoutes = require('./routes/blogRoutes');
 const env = require('dotenv').config();
 
