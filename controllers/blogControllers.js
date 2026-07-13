@@ -5,7 +5,8 @@ const Blog = require('../models/blog');
 const blogPost = (req, res) => {
     Blog.create({
         title : req.body.title,
-        snippet: req.body.snippet
+        snippet: req.body.snippet,
+        author: req.session.userId
     }).then(() => res.redirect('/'))
     .catch(err => console.log(err));
 }

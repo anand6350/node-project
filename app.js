@@ -7,7 +7,7 @@ const methodOverRide = require('method-override');
 const Blog = require('./models/blog');
 const blogRouter = require('./routes/blogRoutes');
 const userRouter = require('./routes/userRoutes');
-const requireAuth = require('./middleware/authMiddleware');
+const {requireAuth, requireOwner} = require('./middleware/authMiddleware');
 const env = require('dotenv').config();
 
 const app = express();
@@ -64,7 +64,7 @@ app.get('/login', (req, res) => {
     res.render('auth/login', {error: null, title: "Sign in"});
 });
 
-app.use('/blogs', blogRouter);
+app.use('/blogs', requireAuth, blogRouter);
 app.use('/auth', userRouter);
 
 app.use(express.static('public'));
