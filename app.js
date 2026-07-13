@@ -1,13 +1,17 @@
 const dns = require('dns');
 dns.setServers(['8.8.8.8', '1.1.1.1']);
 const express = require('express');
+const session = require('express-session');
 const mongoose = require('mongoose');
+const methodOverRide = require('method-override');
 const Blog = require('./models/blog');
-const blogRoutes = require('./routes/blogRoutes');
+const blogRouter = require('./routes/blogRoutes');
+const userRouter = require('./routes/userRoutes');
+const requireAuth = require('./middleware/authMiddleware');
 const env = require('dotenv').config();
 
 const app = express();
-
+app.set('view engine', 'ejs');
 // connect to mongodb
 mongoose.connect(process.env.MONGO_URI)
     .then(() => {
@@ -16,10 +20,21 @@ mongoose.connect(process.env.MONGO_URI)
     })
     .catch(err => console.log(err));
 
-app.set('view engine', 'ejs');
+app.use(session({
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false
+}));
+
+app.use((req, res, next) => {
+    res.locals.currentUser = req.session.userId || null;
+    next();
+});
 
 // parse user data into js objects
 app.use(express.urlencoded({ extended: true }));
+
+app.use(methodOverRide('_method'));
 
 app.use((req, res, next) => {
     console.log(req.method, req.url);
@@ -32,12 +47,26 @@ app.get('/', (req, res) => {
     }).catch(err => console.log(err));    
 });
 
-app.get('/create', (req, res) => {
+app.get('/dashboard', requireAuth, (req, res) => {
+    res.render('dashboard', {title: "Dashboard", });
+});
+
+app.get('/register', (req, res) => {
+    res.render('auth/register', {title: "Sign up"});
+});
+
+app.get('/create',requireAuth, (req, res) => {
     const title = "Add blog";
     res.render('blogs/create', {title});
 });
 
-app.use('/blogs', blogRoutes);
+app.get('/login', (req, res) => {
+    res.render('auth/login', {error: null, title: "Sign in"});
+});
+
+app.use('/blogs', blogRouter);
+app.use('/auth', userRouter);
+
 app.use(express.static('public'));
 
 app.use((req, res) => {

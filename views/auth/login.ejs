@@ -1,0 +1,83 @@
+<%- include('../partials/head'); %>
+<body>
+<%- include('../partials/nav'); %>
+    <div class="container my-5">
+      <div class="row justify-content-center">
+          <div class="col-12 col-md-7 col-lg-5">
+
+              <div class="text-center mb-4">
+                  <h1 class="fw-bold text-dark">Welcome back</h1>
+                  <p class="text-muted fs-5">Log in to continue to your account.</p>
+              </div>
+
+              <div class="card border border-light-subtle shadow-sm">
+                  <div class="card-body p-4 p-md-5">
+
+                      <form action="/auth/login" method="POST">
+
+                          <div class="mb-3">
+                              <label for="email" class="form-label fw-semibold">Email address</label>
+                              <div class="input-group">
+                                  <span class="input-group-text bg-light border-end-0">
+                                      <i class="ti ti-mail text-muted"></i>
+                                  </span>
+                                  <input
+                                      type="email"
+                                      class="form-control border-start-0 ps-0"
+                                      id="email"
+                                      name="email"
+                                      placeholder="you@example.com"
+                                      required
+                                  >
+                              </div>
+                          </div>
+
+                          <div class="mb-2">
+                              <label for="password" class="form-label fw-semibold">Password</label>
+                              <div class="input-group">
+                                  <span class="input-group-text bg-light border-end-0">
+                                      <i class="ti ti-lock text-muted"></i>
+                                  </span>
+                                  <input
+                                      type="password"
+                                      class="form-control border-start-0 ps-0"
+                                      id="password"
+                                      name="password"
+                                      placeholder="Enter your password"
+                                      required
+                                  >
+                              </div>
+                          </div>
+
+                          <div class="d-flex justify-content-end mb-4">
+                              <a href="/forgot-password" class="text-muted text-decoration-none small">Forgot password?</a>
+                          </div>
+
+                          <% if (error) { %>
+                            <p class="text-muted fs-5" style="color:red !important;"><%= error %></p>
+                          <% } %>
+
+                          <button type="submit" class="btn btn-primary w-100 py-2 shadow-sm fw-semibold">
+                              <i class="ti ti-login"></i> Log in
+                          </button>
+
+                          
+
+                      </form>
+
+                      <hr class="my-4 opacity-25">
+
+                      <p class="text-center text-muted mb-0">
+                          Don't have an account?
+                          <a href="/register" class="text-primary fw-semibold text-decoration-none">Sign up</a>
+                      </p>
+
+                  </div>
+              </div>
+
+          </div>
+      </div>
+  </div>
+
+</body>
+</html>

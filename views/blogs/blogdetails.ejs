@@ -31,15 +31,17 @@
                       </div>
 
                   </div>
-
-                  <div class="card-footer bg-white border-top border-light-subtle p-4 d-flex justify-content-between">
-                      <a href="/blogs/<%= blog._id %>/edit" class="btn btn-outline-secondary btn-sm px-3">
+                  <% if(currentUser){ %>
+                    <div class="card-footer bg-white border-top border-light-subtle p-4 d-flex justify-content-between">
+                      <a href="/blogs/edit/<%= blog._id %>" class="btn btn-outline-secondary btn-sm px-3">
                           <i class="ti ti-edit"></i> Edit
                       </a>
                       <button class="btn btn-outline-danger btn-sm px-3 detail-delete-btn" data-id="<%= blog._id %>">
                           <i class="ti ti-trash"></i> Delete
                       </button>
-                  </div>
+                    </div>
+                  <% } %>
+                  
               </div>
 
           </div>
