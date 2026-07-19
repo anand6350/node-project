@@ -66,22 +66,9 @@
                               </div>
                           </div>
 
-                          <!-- <div class="mb-4">
-                              <label for="confirmPassword" class="form-label fw-semibold">Confirm password</label>
-                              <div class="input-group">
-                                  <span class="input-group-text bg-light border-end-0">
-                                      <i class="ti ti-lock text-muted"></i>
-                                  </span>
-                                  <input
-                                      type="password"
-                                      class="form-control border-start-0 ps-0"
-                                      id="confirmPassword"
-                                      name="confirmPassword"
-                                      placeholder="Re-enter your password"
-                                      required
-                                  >
-                              </div>
-                          </div> -->
+                            <% if (error) { %>
+                                <p class="text-muted fs-5" style="color:red !important;"><%= error %></p>
+                            <% } %>
 
                           <button type="submit" class="btn btn-primary w-100 py-2 shadow-sm fw-semibold">
                               <i class="ti ti-user-plus"></i> Create account

@@ -1,33 +1,34 @@
 const Blog = require('../models/blog');
+const asyncHandler = require('../middleware/asyncHandler');
 
 // blogPost, blogDetails, blogDelete
 
-const blogPost = (req, res) => {
-    Blog.create({
+const blogPost = asyncHandler( async(req, res) => {
+    await Blog.create({
         title : req.body.title,
         snippet: req.body.snippet,
         author: req.session.userId
-    }).then(() => res.redirect('/'))
-    .catch(err => console.log(err));
-}
+        });
+    res.redirect('/');
+});
 
-const blogDetails = (req, res) => {
+const blogDetails = asyncHandler( async (req, res) => {
     const id = req.params.id;
-    Blog.findById(id).then(result => {
-        if(!result){
+    const findBlog = await Blog.findById(id);
+        if(!findBlog){
            return res.status(404).render('404', {title: 'blog not found'});
         }
-        res.render('blogs/blogdetails', {title: result.title, blog: result});
-    }).catch(err => {
-        console.log("THE HIDDEN ERROR IS:", err);
-        res.status(500).send("Internal Server Error");
-    });
-}
+        res.render('blogs/blogdetails', {title: findBlog.title, blog: findBlog});
+});
 
-const blogDelete = (req, res) => {
+const blogDelete = asyncHandler ( async (req, res) => {
     const id = req.params.id;
-    Blog.findByIdAndDelete(id).then(result => res.json({redirect: '/'})).catch(err => console.log(err));
-}
+    const deleteBlog = await Blog.findByIdAndDelete(id)
+    if(!deleteBlog){
+        return res.status(404).render('404', { title: 'Blog not found' });
+    }
+    res.redirect('/');
+});
 
 module.exports = {
     blogPost,

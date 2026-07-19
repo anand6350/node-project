@@ -27,7 +27,7 @@
                           <a href="/blogs/<%= blog._id %>" class="btn btn-link text-primary p-0 text-decoration-none fw-semibold">
                               View more →
                           </a>
-                        <% if(currentUser){ %>
+                        <% if(currentUser && currentUser === blog.author.toString()){ %>
                           <button class="btn btn-outline-danger btn-sm px-3 delete-btn" data-id="<%= blog._id %>">
                               <i class="ti ti-trash"></i> Delete
                           </button>

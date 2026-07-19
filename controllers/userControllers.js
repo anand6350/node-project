@@ -1,40 +1,40 @@
 const User = require('../models/user');
+const asyncHandler = require('../middleware/asyncHandler');
 
 // register, login
 
-const register = (req, res) => {
-    User.create({
-        username: req.body.username,
-        email: req.body.email,
-        password: req.body.password
-    }).then(result => {
-        console.log("user added in db");
-        res.redirect('/');
-    }).catch(err => console.log(err));
-}
+const register = asyncHandler( async (req, res) => {
+   const {username, email, password} = req.body;
+   const existingUser = await User.findOne({email});
 
-const login = (req, res) => {
+   if(existingUser){
+    return res.status(400).render('auth/register', {title: "Sign in", error: "This email is already registered."})
+   }
+
+   const createUser = await User.create({
+      username,
+      email,
+      password
+   });
+   res.redirect('/');
+});
+
+const login = asyncHandler( async (req, res) => {
     const {email, password} = req.body;
-    User.findOne({email: email}).then(foundUser => {
+    const foundUser = await User.findOne({email: email});
         if(!foundUser){
             res.status(401).render('auth/login', {error: "invalid mail and password", title: "Sign in"});
             return;
         }
 
-        return foundUser.comparePassword(password).then(passMatched => {
-            if(passMatched){
-                req.session.userId = foundUser._id;
-                console.log("Login succesfull");
-                res.redirect('/');
-            }else{
-                res.status(401).render('auth/login', {error: "invalid mail and password", title: "Sign in"});
+        const passMatched = await foundUser.comparePassword(password);
+            if(!passMatched){
+                return res.status(401).render('auth/login', {error: "invalid mail and password", title: "Sign in"});
             }
-        }).catch(err => {
-            console.log(err);
-            res.status(500).send("Internal Server Error");
-        })
-    })
-}
+            req.session.userId = foundUser._id;
+            res.redirect('/');
+});
+
 module.exports = {
     register,
     login

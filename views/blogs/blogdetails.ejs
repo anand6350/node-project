@@ -31,7 +31,7 @@
                       </div>
 
                   </div>
-                  <% if(currentUser){ %>
+                  <% if(currentUser && currentUser === blog.author.toString()){ %>
                     <div class="card-footer bg-white border-top border-light-subtle p-4 d-flex justify-content-between">
                       <a href="/blogs/edit/<%= blog._id %>" class="btn btn-outline-secondary btn-sm px-3">
                           <i class="ti ti-edit"></i> Edit

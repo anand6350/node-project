@@ -52,7 +52,7 @@ app.get('/dashboard', requireAuth, (req, res) => {
 });
 
 app.get('/register', (req, res) => {
-    res.render('auth/register', {title: "Sign up"});
+    res.render('auth/register', {title: "Sign up", error: null});
 });
 
 app.get('/create',requireAuth, (req, res) => {
@@ -64,7 +64,7 @@ app.get('/login', (req, res) => {
     res.render('auth/login', {error: null, title: "Sign in"});
 });
 
-app.use('/blogs', requireAuth, blogRouter);
+app.use('/blogs', blogRouter);
 app.use('/auth', userRouter);
 
 app.use(express.static('public'));
@@ -72,5 +72,12 @@ app.use(express.static('public'));
 app.use((req, res) => {
     const title = "404";
     res.status(404).render('404', {title})
+});
+
+app.use((err, req, res, next) => {
+    console.log(err.stack);
+
+    const statusCode = res.statusCode && res.statusCode != 200 ? res.statusCode : 500;
+    res.status(statusCode).send({success: false, error: err.message || 'Something went wrong'});
 });
 
