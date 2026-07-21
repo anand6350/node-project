@@ -6,7 +6,8 @@ const validateUser = [
     (req, res, next) => {
         const errors = validationResult(req);
         if(!errors.isEmpty()){
-            return res.status(400).render('auth/login', { title: "Sign in", error: errors.array()[0].msg });
+            const view = req.path.includes('register') ? 'auth/register' : 'auth/login';
+            return res.status(400).render(view, { title: "Sign in", error: errors.array()[0].msg });
         }
         next();
     }
