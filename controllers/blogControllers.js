@@ -27,7 +27,7 @@ const blogDelete = asyncHandler ( async (req, res) => {
     if(!deleteBlog){
         return res.status(404).render('404', { title: 'Blog not found' });
     }
-    res.redirect('/');
+    res.json({ success: true, redirect: '/' });
 });
 
 module.exports = {
